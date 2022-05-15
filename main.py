@@ -3,7 +3,7 @@ clock = time.Clock()
 FPS = 60
 h_win = 500 #высота экрана
 w_win = 700 #ширина экрана
-'''
+
 class Wall(sprite.Sprite):
     def __init__(self,name,c_1,c_2,c_3,wall_x,wall_y,wall_w,wall_h):
         self.name = name
@@ -32,16 +32,20 @@ class GameSprite(sprite.Sprite):
         window.blit(self.images,(self.rect.x,self.rect.y))
 
 class Player(GameSprite):
-    def update(self):
+    def update1(self):
         keys = key.get_pressed()
         if keys[K_LEFT] and self.rect.x > 5:
             self.rect.x -= self.speed
         if keys[K_RIGHT] and self.rect.x < w_win - 105:
             self.rect.x += self.speed
-        if keys[K_UP] and self.rect.y > 5:
-            self.rect.y -= self.speed
-        if keys[K_DOWN] and self.rect.y < h_win - 105:
-            self.rect.y += self.speed
+    def update2(self):
+        keys = key.get_pressed()
+        if keys[K_a] and self.rect.x > 5:
+            self.rect.x -= self.speed
+        if keys[K_d] and self.rect.x < w_win - 105:
+            self.rect.x += self.speed
+
+'''
 class Enemy(GameSprite):
     direction = "left" #направление 
     def update(self): # Функция перемещения 
@@ -70,7 +74,9 @@ kick_soind = mixer.Sound('kick.ogg')
 '''
 #создай окно игры
 window = display.set_mode((w_win,h_win))
-
+img_tocket = 'images/sprite/rakerka.png'
+rocket1 = Player('ракетка 1',10,100,100,250,300,img_tocket)
+rocket2 = Player('ракетка 2',10,100,100,250,300,img_tocket)
 #задай фон сцены
 '''
 b_im = image.load('background.jpg')
@@ -102,9 +108,9 @@ while game:
             game = False
     if not finish:
         window.fill(bgrd_color)
-        '''     
-        player.update()
-        player.reset()
-        '''        
+        rocket1.update1()
+        rocket1.reset()
+        rocket2.update2()
+        rocket2.reset() 
     display.update()
     clock.tick(FPS)

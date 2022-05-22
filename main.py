@@ -45,18 +45,6 @@ class Player(GameSprite):
         if keys[K_d] and self.rect.x < w_win - 105:
             self.rect.x += self.speed
 
-class Ball(GameSprite):
-    direction = "left" #направление 
-    def update(self): # Функция перемещения 
-        if self.rect.x <= 200 : #граница
-            self.direction = "right"
-        if self.rect.x >= 400:
-            self.direction = "left"
-
-        if self.direction == "left":
-            self.rect.x -= self.speed
-        else:
-            self.rect.x += self.speed
 font.init()
 #создаем фоновую музыку
 bgrd_color = (255,255,255)
@@ -70,6 +58,17 @@ mixer.music.play()
 win_sound = mixer.Sound('money.ogg')
 kick_soind = mixer.Sound('kick.ogg')
 '''
+
+nam_1 = 0
+nam_2 = 0
+raund_1 = 0
+raund_2 = 0
+
+speed_x = 5
+speed_y = 5
+raunds = 0
+
+
 speed_ball = 5
 #создай окно игры
 window = display.set_mode((w_win,h_win))
@@ -77,7 +76,8 @@ img_tocket = 'images/sprite/rakerka.png'
 image_ball = 'images/sprite/ball.png'
 rocket1 = Player('ракетка 1',10,100,100,0,300,img_tocket)
 rocket2 = Player('ракетка 2',10,100,100,400,300,img_tocket)
-ball = Ball('мяч',speed_ball,50,50,225,325,image_ball)
+ball = GameSprite('мяч',speed_ball,50,50,225,325,image_ball)
+font1 = font.SysFont('Arial',36)
 #задай фон сцены
 '''
 b_im = image.load('background.jpg')
@@ -98,6 +98,10 @@ gold = GameSprite('gold',10,100,100,10,330,'treasure.png')
 #игровой цыкл
 #игровой цыкл
 '''
+win_text = font1.render('winer 1',1,(255,0,0))
+lose_text = font1.render('winer 2',1,(255,0,0))
+
+
 game = True
 finish = False
 while game:
@@ -110,10 +114,32 @@ while game:
     if not finish:
         window.fill(bgrd_color)
         rocket1.update1()
-        rocket1.reset()
         rocket2.update2()
+        ball.rect.x +=speed_x
+        ball.rect.y +=speed_y
+        if ball.rect.y > h_win - 50 or ball.rect.y < 0:
+            speed_y *= -1
+        if ball.rect.x > w_win - 50 or ball.rect.x < 0:
+            speed_x *= -1
+        if sprite.collide_rect(ball,rocket1) or sprite.collide_rect(ball,rocket2):
+            speed_y *= -1
+        rocket1.reset()
         rocket2.reset() 
-        ball.update()
         ball.reset()
+        risuem =  font1.render('1 игрок: ',1,(0,0,0))
+        window.blit(risuem,(10,10))
+        risuem =  font1.render('2 игрок: ',1,(0,0,0))
+        window.blit(risuem,(550,10))
+        risuem =  font1.render('очки: '+str(nam_1),1,(0,0,0))
+        window.blit(risuem,(10,35))
+        risuem =  font1.render('очки: '+str(nam_2),1,(0,0,0))
+        window.blit(risuem,(550,35))
+        risuem =  font1.render('раунды: '+str(raund_1),1,(0,0,0))
+        window.blit(risuem,(10,60))
+        risuem =  font1.render('раунды: '+str(raund_2),1,(0,0,0))
+        window.blit(risuem,(550,60))
+        risuem =  font1.render('раунд: '+str(raunds),1,(0,0,0))
+        window.blit(risuem,(10,200))
+
     display.update()
     clock.tick(FPS)

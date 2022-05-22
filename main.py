@@ -45,8 +45,7 @@ class Player(GameSprite):
         if keys[K_d] and self.rect.x < w_win - 105:
             self.rect.x += self.speed
 
-'''
-class Enemy(GameSprite):
+class Ball(GameSprite):
     direction = "left" #направление 
     def update(self): # Функция перемещения 
         if self.rect.x <= 200 : #граница
@@ -58,7 +57,6 @@ class Enemy(GameSprite):
             self.rect.x -= self.speed
         else:
             self.rect.x += self.speed
-'''
 font.init()
 #создаем фоновую музыку
 bgrd_color = (255,255,255)
@@ -72,11 +70,14 @@ mixer.music.play()
 win_sound = mixer.Sound('money.ogg')
 kick_soind = mixer.Sound('kick.ogg')
 '''
+speed_ball = 5
 #создай окно игры
 window = display.set_mode((w_win,h_win))
 img_tocket = 'images/sprite/rakerka.png'
-rocket1 = Player('ракетка 1',10,100,100,250,300,img_tocket)
-rocket2 = Player('ракетка 2',10,100,100,250,300,img_tocket)
+image_ball = 'images/sprite/ball.png'
+rocket1 = Player('ракетка 1',10,100,100,0,300,img_tocket)
+rocket2 = Player('ракетка 2',10,100,100,400,300,img_tocket)
+ball = Ball('мяч',speed_ball,50,50,225,325,image_ball)
 #задай фон сцены
 '''
 b_im = image.load('background.jpg')
@@ -112,5 +113,7 @@ while game:
         rocket1.reset()
         rocket2.update2()
         rocket2.reset() 
+        ball.update()
+        ball.reset()
     display.update()
     clock.tick(FPS)

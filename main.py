@@ -98,8 +98,8 @@ gold = GameSprite('gold',10,100,100,10,330,'treasure.png')
 #игровой цыкл
 #игровой цыкл
 '''
-win_text = font1.render('winer 1',1,(255,0,0))
-lose_text = font1.render('winer 2',1,(255,0,0))
+win1_text = font1.render('winer 1',1,(255,0,0))
+win2_text = font1.render('winer 2',1,(255,0,0))
 
 
 game = True
@@ -117,12 +117,34 @@ while game:
         rocket2.update2()
         ball.rect.x +=speed_x
         ball.rect.y +=speed_y
-        if ball.rect.y > h_win - 50 or ball.rect.y < 0:
-            speed_y *= -1
+        if nam_1 >= 11:
+            nam_1 = 0
+            nam_2 = 0
+            raunds += 1
+            raund_1 += 1
+        if nam_2 >= 11:
+            nam_1 = 0
+            nam_2 = 0
+            raunds += 1
+            raund_2 += 1
+        if ball.rect.y > h_win - 50 :
+            speed_y *= -1.01
+            nam_1 += 1
+            speed_x *= 1.01
+        if ball.rect.y < 0:
+            speed_y *= -1.01
+            nam_2 += 1
+            speed_x *= 1.01
         if ball.rect.x > w_win - 50 or ball.rect.x < 0:
             speed_x *= -1
         if sprite.collide_rect(ball,rocket1) or sprite.collide_rect(ball,rocket2):
             speed_y *= -1
+        if raund_1 == 2:
+            finish = True
+            window.blit(win1_text,(320,210))
+        if raund_2 == 2:
+            finish = True
+            window.blit(win2_text,(320,210))
         rocket1.reset()
         rocket2.reset() 
         ball.reset()
